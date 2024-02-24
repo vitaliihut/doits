@@ -1,7 +1,6 @@
 package ua.insultape.agent.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 import ua.insultape.agent.dto.Accelerometer;
 import ua.insultape.agent.dto.AggregatedData;
 import ua.insultape.agent.dto.GPS;
@@ -21,8 +20,12 @@ public class FileDatasource {
     private final String gpsFilename = "gps.csv";
 
     public void openFiles() throws IOException {
-        accelerometerReader = new BufferedReader(new FileReader(ResourceUtils.getFile("classpath:" + accelerometerFilename)));
-        gpsReader = new BufferedReader(new FileReader(ResourceUtils.getFile("classpath:" + gpsFilename)));
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream accelerometerStream = classLoader.getResourceAsStream(accelerometerFilename);
+        InputStream gpsStream = classLoader.getResourceAsStream(gpsFilename);
+
+        accelerometerReader = new BufferedReader(new InputStreamReader(accelerometerStream));
+        gpsReader = new BufferedReader(new InputStreamReader(gpsStream));
 
         // Skip header lines
         accelerometerReader.readLine();
