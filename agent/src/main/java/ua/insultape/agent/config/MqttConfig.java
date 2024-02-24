@@ -24,7 +24,7 @@ import java.net.http.HttpHeaders;
 @Configuration
 public class MqttConfig {
 
-    private static final String MQTT_BROKER_URL = System.getProperty("MQTT_BROKER_URL", "tcp://localhost:1883");
+    private static final String MQTT_BROKER_URL = System.getProperty("MQTT_BROKER_URL", "tcp://mqtt:1883");
     private static final String MQTT_TOPIC = System.getProperty("MQTT_TOPIC", "agent");
 
     @Bean
