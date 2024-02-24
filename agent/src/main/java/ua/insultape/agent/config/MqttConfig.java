@@ -24,7 +24,7 @@ import java.net.http.HttpHeaders;
 @Configuration
 public class MqttConfig {
 
-    private static final String MQTT_BROKER_URL = System.getProperty("MQTT_BROKER_URL", "tcp//localhost:1883");
+    private static final String MQTT_BROKER_URL = System.getProperty("MQTT_BROKER_URL", "tcp://localhost:1883");
     private static final String MQTT_TOPIC = System.getProperty("MQTT_TOPIC", "agent");
 
     @Bean
@@ -37,38 +37,37 @@ public class MqttConfig {
         return factory;
     }
 
-    @Bean
-    public MessageChannel mqttInputChannel() {
-        return new DirectChannel();
-    }
-
-    @Bean
-    public MessageProducer inbound() {
-        MqttPahoMessageDrivenChannelAdapter adapter =
-                new MqttPahoMessageDrivenChannelAdapter("serverIn", mqttClientFactory(), MQTT_TOPIC);
-        adapter.setCompletionTimeout(10000);
-        adapter.setConverter(new DefaultPahoMessageConverter());
-        adapter.setQos(1);
-        adapter.setOutputChannel(mqttInputChannel());
-        adapter.addTopic(MQTT_TOPIC);
-        return adapter;
-    }
-
-    @Bean
-    @ServiceActivator(inputChannel = "mqttInputChannel")
-    public MessageHandler handler() {
-        return new MessageHandler() {
-
-            @Override
-            public void handleMessage(Message<?> message) throws MessagingException {
-                String topic = message.getHeaders().get(MqttHeaders.RECEIVED_TOPIC).toString();
-                if (topic.equals(MQTT_TOPIC)) {
-                    log.info("This is our topic");
-                }
-                log.info("Payload: {}", message.getPayload());
-            }
-        };
-    }
+//    @Bean
+//    public MessageChannel mqttInputChannel() {
+//        return new DirectChannel();
+//    }
+//
+//    @Bean
+//    public MessageProducer inbound() {
+//        MqttPahoMessageDrivenChannelAdapter adapter =
+//                new MqttPahoMessageDrivenChannelAdapter("serverIn", mqttClientFactory(), MQTT_TOPIC);
+//        adapter.setCompletionTimeout(10000);
+//        adapter.setConverter(new DefaultPahoMessageConverter());
+//        adapter.setQos(1);
+//        adapter.setOutputChannel(mqttInputChannel());
+//        return adapter;
+//    }
+//
+//    @Bean
+//    @ServiceActivator(inputChannel = "mqttInputChannel")
+//    public MessageHandler handler() {
+//        return new MessageHandler() {
+//
+//            @Override
+//            public void handleMessage(Message<?> message) throws MessagingException {
+//                String topic = message.getHeaders().get(MqttHeaders.RECEIVED_TOPIC).toString();
+//                if (topic.equals(MQTT_TOPIC)) {
+//                    log.info("This is our topic");
+//                }
+//                log.info("Payload: {}", message.getPayload());
+//            }
+//        };
+//    }
 
     @Bean
     @ServiceActivator(inputChannel = "mqttOutboundChannel")
