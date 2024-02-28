@@ -1,21 +1,21 @@
 package ua.insultape.store.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "processed_agent_data")
-public class ProcessedAgentData {
+public class ProcessedAgentDataDb {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
     private String roadState;
-    private int user_id;
+    private int userId;
     private double x;
     private double y;
     private double z;
