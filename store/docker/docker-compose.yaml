@@ -33,6 +33,25 @@ services:
       db_network:
 
 
+  store:
+    container_name: store
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: test_db
+      POSTGRES_HOST: postgres_db
+      POSTGRES_PORT: 5432
+    ports:
+      - "8080:8080"
+    networks:
+      db_network:
+
 
 networks:
   db_network:
