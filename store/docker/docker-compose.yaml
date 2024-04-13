@@ -50,11 +50,14 @@ services:
     ports:
       - "8080:8080"
     networks:
-      db_network:
+      - db_network
+      - road_vision__hub_shared_network
 
 
 networks:
   db_network:
+  road_vision__hub_shared_network:
+    external: true
 
 
 volumes:
