@@ -1,16 +1,13 @@
 package ua.insultape.agent.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.MessageHandler;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ua.insultape.agent.config.MqttGateway;
-import ua.insultape.agent.dto.AggregatedData;
+import ua.insultape.agent.dto.AgentData;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 
 @Slf4j
@@ -37,10 +34,10 @@ public class DataProcessScheduler {
 
     @Scheduled(fixedDelay = 10000)
     public void readDataAndProcess() throws IOException {
-        List<AggregatedData> aggregatedDataList = fileDatasource.read();
+        List<AgentData> agentDataList = fileDatasource.read();
         log.info("Read data:");
-        for (AggregatedData aggregatedData : aggregatedDataList) {
-            String json = objectMapper.writeValueAsString(aggregatedData);
+        for (AgentData agentData : agentDataList) {
+            String json = objectMapper.writeValueAsString(agentData);
             log.info("data: {}", json);
             mqttGateway.sendToMqtt(json);
         }

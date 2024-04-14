@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class GPS {
 
-    private float longitude;
-    private float latitude;
+    private Double longitude;
+    private Double latitude;
 }
