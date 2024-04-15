@@ -1,9 +1,11 @@
 package ua.insultape.edge.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ua.insultape.edge.dto.AgentData;
 import ua.insultape.edge.dto.ProcessedAgentData;
+import ua.insultape.edge.service.hub.HubService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,10 +20,16 @@ public class DataProcessingService {
 
     private final List<Integer> pastReadings = new ArrayList<>();
 
+    private final HubService hubService;
+
+    public DataProcessingService(@Qualifier("httpHubService") HubService hubService) {
+        this.hubService = hubService;
+    }
+
     public void process(AgentData agentData) {
         ProcessedAgentData processedData = processRoadState(agentData);
         log.info("Processed agent data: {}", processedData);
-        // TODO: store data using hub
+        hubService.saveProcessedAgentData(processedData);
     }
 
     private ProcessedAgentData processRoadState(AgentData agentData) {
