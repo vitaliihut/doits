@@ -22,7 +22,7 @@ public class DataProcessingService {
 
     private final HubService hubService;
 
-    public DataProcessingService(@Qualifier("httpHubService") HubService hubService) {
+    public DataProcessingService(@Qualifier("mqttHubService") HubService hubService) {
         this.hubService = hubService;
     }
 
@@ -42,9 +42,6 @@ public class DataProcessingService {
         int range = maxReading - minReading;
 
         String roadState = analyzeRoadState(range);
-        log.info("Road range: {}", range);
-        log.info("past len: {}", pastReadings.size());
-        log.info("first {} and last element {}", pastReadings.getFirst(), pastReadings.getLast());
 
         ProcessedAgentData processedData = new ProcessedAgentData();
         processedData.setRoadState(roadState);

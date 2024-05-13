@@ -14,9 +14,9 @@ public class WebConfig {
     @Bean
     public WebClient webClient() {
         return WebClient.builder()
-                .baseUrl("http://store:8080")
+//                .baseUrl("http://store:8080")
+                .baseUrl("http://localhost:8080")
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//                .defaultUriVariables(Collections.singletonMap("url", "http://localhost:8080"))
                 .build();
     }
 }
