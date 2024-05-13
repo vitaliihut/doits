@@ -2,10 +2,11 @@ package ua.insultape.agent.service;
 
 import org.springframework.stereotype.Service;
 import ua.insultape.agent.dto.Accelerometer;
-import ua.insultape.agent.dto.AggregatedData;
+import ua.insultape.agent.dto.AgentData;
 import ua.insultape.agent.dto.GPS;
 
 import java.io.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @Service
 public class FileDatasource {
     private static final int DATA_STACK_NUMBER = 5;
+    private static final int USER_ID = 67;
 
     private BufferedReader accelerometerReader;
     private BufferedReader gpsReader;
@@ -32,10 +34,10 @@ public class FileDatasource {
         gpsReader.readLine();
     }
 
-    public List<AggregatedData> read() throws IOException {
-        List<AggregatedData> aggregatedDataList = new ArrayList<>();
+    public List<AgentData> read() throws IOException {
+        List<AgentData> agentDataList = new ArrayList<>();
 
-        while (aggregatedDataList.size() < DATA_STACK_NUMBER) {
+        while (agentDataList.size() < DATA_STACK_NUMBER) {
 
             Accelerometer accelerometerData = readAccelerometerData();
             GPS gpsData = readGpsData();
@@ -45,15 +47,15 @@ public class FileDatasource {
                 continue;
             }
 
-            AggregatedData aggregatedData = new AggregatedData();
-            aggregatedData.setAccelerometer(accelerometerData);
-            aggregatedData.setGps(gpsData);
-            aggregatedData.setDate(new Date()); // Set current date/time
-
-            aggregatedDataList.add(aggregatedData);
+            AgentData agentData = new AgentData();
+            agentData.setAccelerometer(accelerometerData);
+            agentData.setGps(gpsData);
+            agentData.setTimestamp(new Timestamp(System.currentTimeMillis())); // Set current date/time
+            agentData.setUserId(USER_ID);
+            agentDataList.add(agentData);
         }
 
-        return aggregatedDataList;
+        return agentDataList;
     }
 
     private Accelerometer readAccelerometerData() throws IOException {
@@ -79,8 +81,8 @@ public class FileDatasource {
         String[] parts = line.split(",");
         // Assuming GPS class has appropriate setters
         GPS gps = new GPS();
-        gps.setLatitude(Float.parseFloat(parts[0]));
-        gps.setLongitude(Float.parseFloat(parts[1]));
+        gps.setLatitude(Double.parseDouble(parts[0]));
+        gps.setLongitude(Double.parseDouble(parts[1]));
         return gps;
     }
 

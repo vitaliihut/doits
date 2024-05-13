@@ -1,4 +1,4 @@
-package ua.insultape.agent.dto;
+package ua.insultape.edge.dto;
 
 import lombok.Getter;
 import lombok.Setter;
